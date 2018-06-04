@@ -8,7 +8,6 @@
  ============================================================================
  */
 
-#include <stdio.h>
 #include <stdlib.h>
 #include <gtk-2.0/gtk/gtk.h>
 
@@ -25,6 +24,5 @@ int main(int argc, char **argv) {
 	gtk_widget_show(MainWindow);
 	gtk_main();
 
-	printf("!!!Hello World!!!"); /* prints !!!Hello World!!! */
-	return EXIT_SUCCESS;
+	return 1;
 }
