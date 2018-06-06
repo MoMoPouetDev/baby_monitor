@@ -15,6 +15,8 @@
 #include <gtk/gtk.h>
 #include <vlc/vlc.h>
 
+#define URI_VIDEO "/home/morgan/Téléchargements/SampleVideo_1280x720_5mb.mp4"
+
 libvlc_media_player_t *MediaPlayer;
 libvlc_instance_t *VlcInst;
 
@@ -31,14 +33,22 @@ void playerOnRealize(GtkWidget *widget, gpointer data)
 int main(int argc, char **argv)
 {
     /* Variables */
+
+	char *VideoURI = URI_VIDEO;
+
     GtkWidget *MainWindow = NULL,
     			*MainTable = NULL,
     			*ButtonSound[3],
     			*ButtonPower = NULL,
 				*VideoWindow = NULL;
 
+    sigset_t set;
+    signal(SIGCHLD, SIG_DFL);
+    sigemptyset(&set);
+    sigaddset(&set, SIGPIPE);
+    pthread_sigmask(SIG_BLOCK, &set, NULL);
+
     libvlc_media_t *VideoMedia;
-    //VideoMedia =
 
     /* Initialisation de GTK+ */
     gtk_init(&argc, &argv);
@@ -59,16 +69,14 @@ int main(int argc, char **argv)
     ButtonPower = gtk_button_new_with_label("OFF");
 
     /* Insertion VLC */
+    VideoMedia = libvlc_media_new_location(VlcInst, VideoURI);
+    libvlc_media_player_set_media(MediaPlayer, VideoMedia);
+    libvlc_media_player_play(MediaPlayer);
+
     VideoWindow = gtk_drawing_area_new();
-    //gtk_container_add(GTK_CONTAINER(MainWindow), VideoWindow);
+    gtk_container_add(GTK_CONTAINER(MainWindow), VideoWindow);
 
-    sigset_t set;
-    signal(SIGCHLD, SIG_DFL);
-    sigemptyset(&set);
-    sigaddset(&set, SIGPIPE);
-    pthread_sigmask(SIG_BLOCK, &set, NULL);
-
-    VlcInst = libvlc_new(argc, argv);
+    VlcInst = libvlc_new(0, NULL);
     MediaPlayer = libvlc_media_player_new(VlcInst);
     g_signal_connect(G_OBJECT(VideoWindow), "realize", G_CALLBACK(playerOnRealize), NULL);
 
@@ -89,6 +97,7 @@ int main(int argc, char **argv)
     gtk_main();
 
     /* Fermeture de GTK+ */
+    libvlc_media_release(VideoMedia);
     libvlc_media_player_release(MediaPlayer);
     libvlc_release(VlcInst);
     gtk_exit(EXIT_SUCCESS);
