@@ -15,7 +15,7 @@
 #include <gtk/gtk.h>
 #include <vlc/vlc.h>
 
-#define URI_VIDEO "/home/morgan/Téléchargements/SampleVideo_1280x720_5mb.mp4"
+#define URI_VIDEO "file:///home/morgan/test.mp4"
 
 libvlc_media_player_t *MediaPlayer;
 libvlc_instance_t *VlcInst;
@@ -72,6 +72,7 @@ int main(int argc, char **argv)
     VideoMedia = libvlc_media_new_location(VlcInst, VideoURI);
     libvlc_media_player_set_media(MediaPlayer, VideoMedia);
     libvlc_media_player_play(MediaPlayer);
+    g_free(VideoURI);
 
     VideoWindow = gtk_drawing_area_new();
     gtk_container_add(GTK_CONTAINER(MainWindow), VideoWindow);
