@@ -34,7 +34,7 @@ int main(int argc, char **argv)
 {
     /* Variables */
 
-	char *VideoURI = URI_VIDEO;
+	gchar *VideoURI = URI_VIDEO;
 
     GtkWidget *MainWindow = NULL,
     			*MainTable = NULL,
@@ -69,17 +69,18 @@ int main(int argc, char **argv)
     ButtonPower = gtk_button_new_with_label("OFF");
 
     /* Insertion VLC */
-    VideoMedia = libvlc_media_new_location(VlcInst, VideoURI);
-    libvlc_media_player_set_media(MediaPlayer, VideoMedia);
-    libvlc_media_player_play(MediaPlayer);
-    g_free(VideoURI);
-
     VideoWindow = gtk_drawing_area_new();
-    gtk_container_add(GTK_CONTAINER(MainWindow), VideoWindow);
+    gtk_table_attach_defaults(GTK_TABLE(MainTable), VideoWindow, 1, 6, 1, 6);
+    //gtk_container_add(GTK_CONTAINER(MainWindow), VideoWindow);
 
     VlcInst = libvlc_new(0, NULL);
     MediaPlayer = libvlc_media_player_new(VlcInst);
     g_signal_connect(G_OBJECT(VideoWindow), "realize", G_CALLBACK(playerOnRealize), NULL);
+
+    VideoMedia = libvlc_media_new_location(VlcInst, VideoURI);
+	libvlc_media_player_set_media(MediaPlayer, VideoMedia);
+	libvlc_media_player_play(MediaPlayer);
+	//g_free(VideoURI);
 
     /* Insertion des boutons */
     gtk_table_attach(GTK_TABLE(MainTable), ButtonPower, 8, 9, 1, 2, GTK_EXPAND | GTK_FILL, GTK_EXPAND, 0, 0);
@@ -98,6 +99,7 @@ int main(int argc, char **argv)
     gtk_main();
 
     /* Fermeture de GTK+ */
+    g_free(VideoURI);
     libvlc_media_release(VideoMedia);
     libvlc_media_player_release(MediaPlayer);
     libvlc_release(VlcInst);
