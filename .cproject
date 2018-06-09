@@ -30,7 +30,6 @@
 								<option id="gnu.c.compiler.exe.debug.option.debugging.level.1126153647" name="Debug Level" superClass="gnu.c.compiler.exe.debug.option.debugging.level" useByScannerDiscovery="false" value="gnu.c.debugging.level.max" valueType="enumerated"/>
 								<option id="gnu.c.compiler.option.include.paths.1140583091" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" useByScannerDiscovery="false" valueType="includePath">
 									<listOptionValue builtIn="false" value="/usr/include/gtk-2.0"/>
-									<listOptionValue builtIn="false" value="/usr/include/gstreamer-1.0/"/>
 									<listOptionValue builtIn="false" value="/usr/lib/x86_64-linux-gnu/gtk-2.0/include"/>
 									<listOptionValue builtIn="false" value="/usr/include/gio-unix-2.0/"/>
 									<listOptionValue builtIn="false" value="/usr/include/cairo"/>
@@ -44,13 +43,13 @@
 									<listOptionValue builtIn="false" value="/usr/lib/x86_64-linux-gnu/glib-2.0/include"/>
 									<listOptionValue builtIn="false" value="/usr/include/freetype2"/>
 									<listOptionValue builtIn="false" value="/usr/include"/>
+									<listOptionValue builtIn="false" value="/usr/include/vlc"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.154195704" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
 							</tool>
 							<tool commandLinePattern="${COMMAND} `pkg-config --cflags --libs gtk+-2.0` ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" id="cdt.managedbuild.tool.gnu.c.linker.exe.debug.1876811182" name="GCC C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.exe.debug">
 								<option id="gnu.c.link.option.libs.1310768362" name="Libraries (-l)" superClass="gnu.c.link.option.libs" useByScannerDiscovery="false" valueType="libs">
 									<listOptionValue builtIn="false" value="vlc"/>
-									<listOptionValue builtIn="false" value="gstreamer-1.0"/>
 									<listOptionValue builtIn="false" value="vlccore"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.c.linker.input.1332126055" superClass="cdt.managedbuild.tool.gnu.c.linker.input">
