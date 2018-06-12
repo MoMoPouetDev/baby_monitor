@@ -17,13 +17,9 @@
 
 #define URI_VIDEO "file:///home/morgan/test.mp4"
 
+int VolumeIndicator = 0;
 libvlc_media_player_t *MediaPlayer;
 libvlc_instance_t *VlcInst;
-
-void onDestroy(GtkWidget *widget, gpointer data)
-{
-    gtk_main_quit();
-}
 
 void playerOnRealize(GtkWidget *widget, gpointer data)
 {
@@ -42,14 +38,16 @@ void onClickMute(GtkWidget *widget, gpointer data)
 		gtk_button_set_label(GTK_BUTTON(widget), "Mute");
 	}
 }
-void onClickUp(GtkWidget *widget, gpointer data)
+void onClickUp(GtkWidget *widget, gpointer VolumeImage)
 {
-	//gtk_image_set_from_file();
+	//VolumeImage[VolumeIndicator] = gtk_image_new_from_file("/home/morgan/testImageVolumeGreen.png");
+	//VolumeIndicator++;
 }
 
-void onClickDown(GtkWidget *widget, gpointer data)
+void onClickDown(GtkWidget *widget, gpointer VolumeImage)
 {
-
+	//VolumeImage[VolumeIndicator] = gtk_image_new_from_file("/home/morgan/testImageVolume.png");
+	//VolumeIndicator--;
 }
 
 int main(int argc, char **argv)
@@ -79,7 +77,8 @@ int main(int argc, char **argv)
 
     /* Création de la fenêtre */
     MainWindow = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-    gtk_window_set_default_size(GTK_WINDOW(MainWindow), 480, 320);
+    gtk_container_set_border_width(GTK_CONTAINER(MainWindow), 10);
+    gtk_widget_set_size_request(MainWindow, 480, 320);
 
     /* Création des tables */
     MainTable = gtk_table_new(20, 20, TRUE);
@@ -99,7 +98,7 @@ int main(int argc, char **argv)
     	VUImage[i] = gtk_image_new_from_file("/home/morgan/testImage.png");
     	LeftAttach = 2+i;
     	RightAttach = 3+i;
-    	gtk_table_attach_defaults(GTK_TABLE(MainTable), VUImage[i], LeftAttach, RightAttach, 17, 19);
+    	gtk_table_attach_defaults(GTK_TABLE(MainTable), VUImage[i], LeftAttach, RightAttach, 18, 20);
     }
 
     int TopAttach = 0;
@@ -108,12 +107,13 @@ int main(int argc, char **argv)
     	VolumeImage[i] = gtk_image_new_from_file("/home/morgan/testImageVolume.png");
     	TopAttach = 3+i;
 		BottomAttach = 4+i;
-		gtk_table_attach_defaults(GTK_TABLE(MainTable), VolumeImage[i], 18, 19, TopAttach, BottomAttach);
+		gtk_table_attach(GTK_TABLE(MainTable), VolumeImage[i], 17, 20, TopAttach, BottomAttach, GTK_EXPAND | GTK_FILL, GTK_EXPAND, 0, 0);
+		i++;
     }
 
     /* Insertion VLC */
     VideoWindow = gtk_drawing_area_new();
-    gtk_table_attach_defaults(GTK_TABLE(MainTable), VideoWindow, 1, 17, 1, 13);
+    gtk_table_attach_defaults(GTK_TABLE(MainTable), VideoWindow, 0, 16, 0, 14);
 
     VlcInst = libvlc_new(0, NULL);
     MediaPlayer = libvlc_media_player_new(VlcInst);
@@ -125,16 +125,16 @@ int main(int argc, char **argv)
 	//g_free(VideoURI);
 
     /* Insertion des boutons */
-    gtk_table_attach_defaults(GTK_TABLE(MainTable), ButtonPower, 18, 19, 1, 2);
-    gtk_table_attach_defaults(GTK_TABLE(MainTable), ButtonSound[0], 18, 19, 13, 15);
-    gtk_table_attach_defaults(GTK_TABLE(MainTable), ButtonSound[1], 18, 19, 15, 17);
-    gtk_table_attach_defaults(GTK_TABLE(MainTable), ButtonSound[2], 18, 19, 17, 19);
+    gtk_table_attach_defaults(GTK_TABLE(MainTable), ButtonPower, 17, 20, 1, 3);
+    gtk_table_attach_defaults(GTK_TABLE(MainTable), ButtonSound[0], 17, 20, 13, 15);
+    gtk_table_attach_defaults(GTK_TABLE(MainTable), ButtonSound[1], 17, 20, 15, 17);
+    gtk_table_attach_defaults(GTK_TABLE(MainTable), ButtonSound[2], 17, 20, 17, 19);
 
     /* Création des signaux */
-    g_signal_connect(G_OBJECT(MainWindow), "destroy", G_CALLBACK(onDestroy), NULL);
+    g_signal_connect(G_OBJECT(MainWindow), "destroy", G_CALLBACK(gtk_main_quit), NULL);
     g_signal_connect(G_OBJECT(ButtonSound[1]), "clicked", G_CALLBACK(onClickMute), ButtonSound[1]);
-    g_signal_connect(G_OBJECT(ButtonSound[0]), "clicked", G_CALLBACK(onClickUp), VolumeImage);
-    g_signal_connect(G_OBJECT(ButtonSound[2]), "clicked", G_CALLBACK(onClickDown), VolumeImage);
+    g_signal_connect(G_OBJECT(ButtonSound[0]), "clicked", G_CALLBACK(onClickUp), *VolumeImage);
+    g_signal_connect(G_OBJECT(ButtonSound[2]), "clicked", G_CALLBACK(onClickDown), *VolumeImage);
 
 
     /* Affichage et boucle événementielle */
